@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  vpn:
+    image: dperson/openvpn-client
+    command:
+      - "-a"
+      - "${USERNAME};${PASSWORD}"
+    cap_add:
+      - net_admin
+    ports:
+      - "${PROXY_PORT}:1080"
+    volumes:
+      - ./vpn:/vpn
+      - /dev/net:/dev/net:z
+
+  proxy:
+    image: serjs/go-socks5-proxy
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
