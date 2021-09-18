@@ -5,6 +5,8 @@ services:
     command:
       - "-a"
       - "${USERNAME};${PASSWORD}"
+      - "-f"
+      - "''"
     cap_add:
       - net_admin
     ports:
