@@ -12,8 +12,8 @@ services:
     ports:
       - "${PROXY_PORT}:1080"
     volumes:
-      - ./vpn:/vpn
-      - /dev/net:/dev/net:z
+      - "${VPN_CONFIG}:/vpn/vpn.conf:ro"
+      - "/dev/net:/dev/net:z"
 
   proxy:
     image: serjs/go-socks5-proxy
