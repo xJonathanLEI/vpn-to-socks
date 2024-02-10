@@ -1,22 +1,18 @@
 version: "3.8"
 services:
   vpn:
-    image: dperson/openvpn-client
-    command:
-      - "-a"
-      - "${USERNAME};${PASSWORD}"
-      - "-f"
-      - "''"
+    image: "linuxserver/wireguard"
     cap_add:
-      - net_admin
+      - "net_admin"
     ports:
       - "${PROXY_PORT}:1080"
     volumes:
-      - "${VPN_CONFIG}:/vpn/vpn.conf:ro"
-      - "/dev/net:/dev/net:z"
+      - "${VPN_CONFIG}:/config/wg_confs/wg0.conf:ro"
+    sysctls:
+      - "net.ipv4.conf.all.src_valid_mark=1"
 
   proxy:
-    image: serjs/go-socks5-proxy
+    image: "serjs/go-socks5-proxy"
     network_mode: "service:vpn"
     depends_on:
-      - vpn
+      - "vpn"
